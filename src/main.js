@@ -8,6 +8,12 @@ import './assets/css/global.css'
 // 导入axios配置
 import axios from 'axios'
 axios.defaults.baseURL = 'http://127.0.0.1:8888/api/private/v1/'
+// 挂载到vue全局对象中。加载一个拦截器。因为API调用需要请求头中包含token值，才证明有权限，修改里面的数据
+axios.interceptors.request.use(config => {
+  console.log(config)
+  config.headers.Authorization = window.sessionStorage.getItem('token')
+  return config
+})
 // 把axios 挂载到vue全局对象中。随时用http调用
 Vue.prototype.$http = axios
 
