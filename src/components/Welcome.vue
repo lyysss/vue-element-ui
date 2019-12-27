@@ -1,5 +1,8 @@
 <template>
-    <div>welcome</div>
+    <div>welcome sssssssssss11
+
+        <div>把握现在</div>
+    </div>
 </template>
 <script>
 export default {
