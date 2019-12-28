@@ -11,7 +11,7 @@
         </el-header>
         <el-container>
             <el-aside :width="iscollapse?'64px':'200px'">
-                <div class="toggle-button" @click='toggleBtn'>|||</div>
+                <div class="toggle-button" @click="toggleBtn">|||</div>
 
                 <el-menu
                     background-color="#333744"
@@ -20,6 +20,8 @@
                     :unique-opened="true"
                     :collapse="iscollapse"
                     :collapse-transition="false"
+                    :router="true"
+                    :default-active="activePath"
                 >
                     <el-submenu :index="item.id+ ''" v-for="item in menulist" :key="item.id">
                         <template slot="title">
@@ -27,9 +29,10 @@
                             <span>{{item.authName}}</span>
                         </template>
                         <el-menu-item
-                            :index="subItem.id + ' '"
+                            :index="'/'+subItem.path"
                             v-for="subItem in item.children"
                             :key="subItem.id"
+                            @click="activePathBtn('/'+subItem.path)"
                         >
                             <template slot="title">
                                 <i class="el-icon-menu"></i>
@@ -60,12 +63,15 @@ export default {
                 '102': 'el-icon-document',
                 '145': 'el-icon-s-data'
             },
-            iscollapse: false
+            iscollapse: false,
+            activePath: ''
         }
     },
     created () {
         this.getMenulist()
+        this.activePath = window.sessionStorage.getItem('activePath')
     },
+
     methods: {
         tuichu: function () {
             window.sessionStorage.clear()
@@ -79,6 +85,11 @@ export default {
         },
         toggleBtn () {
             this.iscollapse = !this.iscollapse
+        },
+        activePathBtn (path) {
+            this.activePath = path
+            window.sessionStorage.setItem('activePath', path)
+            console.log(path)
         }
     }
 }

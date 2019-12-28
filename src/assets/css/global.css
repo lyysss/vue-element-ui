@@ -7,3 +7,10 @@ body,
     padding: 0;
 
 }
+.el-breadcrumb{
+    margin-bottom: 20px;
+    font-size: 12px;
+}
+.el-pagination{
+    margin-top: 20px;
+}
