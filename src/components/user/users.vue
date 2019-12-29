@@ -51,6 +51,7 @@
                                     icon="el-icon-edit"
                                     :style="scope.row"
                                     circle
+                                    @click="showChanggeUser(scope.row.id)"
                                 ></el-button>
                             </el-tooltip>
                             <el-tooltip
@@ -88,11 +89,42 @@
                 title="添加用户"
                 :visible.sync="addDialogVisible"
                 width="50%"
+                @close="addDialogClosed"
+            >
+                <el-form
+                    :model="addUsersFrom"
+                    :rules="addUsersFromRules"
+                    ref="addFromRef"
+                    label-width="100px"
+                >
+                    <el-form-item label="用户账号" prop="username">
+                        <el-input v-model="addUsersFrom.username"></el-input>
+                    </el-form-item>
+                    <el-form-item label="用户密码" prop="password">
+                        <el-input type="password" v-model="addUsersFrom.password"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" prop="email">
+                        <el-input v-model="addUsersFrom.email"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机" prop="mobile">
+                        <el-input v-model="addUsersFrom.mobile"></el-input>
+                    </el-form-item>
+                </el-form>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="addDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="addUser">确 定</el-button>
+                </span>
+            </el-dialog>
+
+            <el-dialog
+                title="修改管理员资料"
+                :visible.sync="changgeUser"
+                width="50%"
             >
                 <span>这是一段信息</span>
                 <span slot="footer" class="dialog-footer">
-                    <el-button @click="addDialogVisible = false">取 消</el-button>
-                    <el-button type="primary" @click="addDialogVisible = false">确 定</el-button>
+                    <el-button @click="changgeUser = false">取 消</el-button>
+                    <el-button type="primary" @click="changgeUser = false">确 定</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -111,7 +143,37 @@ export default {
             },
             userList: [],
             total: 0,
-            addDialogVisible: false
+            // 添加用户管理员窗口的显示隐藏
+            addDialogVisible: false,
+            changgeUser: false,
+            // 添加的用户信息表单
+            addUsersFrom: {
+                username: '',
+                password: '',
+                email: '',
+                mobile: ''
+            },
+            // 添加的用户信息表单 规则
+            addUsersFromRules: {
+                username: [
+                    { required: true, message: '请输入账号', trigger: 'blur' },
+                    { min: 4, max: 15, message: '账号的长度在4~15字符之间' }
+                ],
+                password: [
+                    { required: true, message: '请输入密码', trigger: 'blur' },
+                    { min: 6, max: 18, message: '账号的长度在6~18字符之间' }
+                ],
+                email: [
+                    { required: true, message: '请输入邮箱', trigger: 'blur' }
+                ],
+                mobile: [
+                    {
+                        required: true,
+                        message: '请输入手机号码',
+                        trigger: 'blur'
+                    }
+                ]
+            }
         }
     },
     created () {
@@ -148,6 +210,30 @@ export default {
                 return this.$message.error('更新用户状态失败。')
             }
             this.$message.success('状态更新成功')
+        },
+        addDialogClosed () {
+            this.$refs.addFromRef.resetFields()
+        },
+        // 点击按钮添加新用户并预校验
+        addUser () {
+            this.$refs.addFromRef.validate(async valid => {
+                if (!valid) return this.$message.error('表单未完整')
+                // 验证通过可以发起请求添加用户了
+                const { data: res } = await this.$http.post(
+                    'users',
+                    this.addUsersFrom
+                )
+                if (res.meta.status !== 201) {
+                    this.$message.error('添加用户失败！')
+                }
+                this.$message.success('添加用户成功！')
+                this.addDialogVisible = false
+                this.getUserList()
+            })
+        },
+        showChanggeUser (id) {
+            this.changgeUser = true
+            console.log(id)
         }
     }
 }
