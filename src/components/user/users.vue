@@ -60,7 +60,12 @@
                                 placement="top"
                                 :enterable="false"
                             >
-                                <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                                <el-button
+                                    type="danger"
+                                    icon="el-icon-delete"
+                                    circle
+                                    @click="removeUserById(scope.row.id)"
+                                ></el-button>
                             </el-tooltip>
                             <el-tooltip
                                 effect="dark"
@@ -120,11 +125,27 @@
                 title="修改管理员资料"
                 :visible.sync="changgeUser"
                 width="50%"
+                @close="editDialogClosed"
             >
-                <span>这是一段信息</span>
+                <el-form
+                    ref="editFormRef"
+                    :model="editForm"
+                    :rules="editFormRules"
+                    label-width="100px"
+                >
+                    <el-form-item label="用户名">
+                        <el-input v-model="editForm.username" :disabled="true"></el-input>
+                    </el-form-item>
+                    <el-form-item label="邮箱" prop="email">
+                        <el-input v-model="editForm.email"></el-input>
+                    </el-form-item>
+                    <el-form-item label="手机" prop="mobile">
+                        <el-input v-model="editForm.mobile"></el-input>
+                    </el-form-item>
+                </el-form>
                 <span slot="footer" class="dialog-footer">
                     <el-button @click="changgeUser = false">取 消</el-button>
-                    <el-button type="primary" @click="changgeUser = false">确 定</el-button>
+                    <el-button type="primary" @click="editDialogCheck">确 定</el-button>
                 </span>
             </el-dialog>
         </div>
@@ -146,6 +167,21 @@ export default {
             // 添加用户管理员窗口的显示隐藏
             addDialogVisible: false,
             changgeUser: false,
+            // 动态获取到最新的当前用户修改的自己的信息--修改按钮
+            editForm: {},
+            // 修改的表单验证规则。
+            editFormRules: {
+                email: [
+                    { required: true, message: '请输入邮箱', trigger: 'blur' }
+                ],
+                mobile: [
+                    {
+                        required: true,
+                        message: '请输入手机号码',
+                        trigger: 'blur'
+                    }
+                ]
+            },
             // 添加的用户信息表单
             addUsersFrom: {
                 username: '',
@@ -231,13 +267,58 @@ export default {
                 this.getUserList()
             })
         },
-        showChanggeUser (id) {
+        async showChanggeUser (id) {
+            const { data: res } = await this.$http.get('users/' + id)
+            if (res.meta.status !== 200) {
+                return this.$message.error('查询用户失败')
+            }
+            this.editForm = res.data
             this.changgeUser = true
-            console.log(id)
+        },
+        // 监听修改用户窗口的关闭事件
+        editDialogClosed () {
+            this.$refs.editFormRef.resetFields()
+        },
+        // 修改用户资料预验证并提交信息
+        editDialogCheck () {
+            this.$refs.editFormRef.validate(async valid => {
+                if (!valid) return this.$message.error('表单未完整')
+                // 验证通过可以发起请求添加用户了
+                const { data: res } = await this.$http.put(
+                    'users/' + this.editForm.id,
+                    { email: this.editForm.email, mobile: this.editForm.mobile }
+                )
+                if (res.meta.status !== 200) {
+                    return this.$message.error('修改用户失败！')
+                }
+                this.changgeUser = false
+                this.getUserList()
+                this.$message.success('修改用户成功！')
+            })
+        },
+        // 点击删除按钮。确认删除当前用户
+        removeUserById (id) {
+            this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+                confirmButtonText: '确定',
+                cancelButtonText: '取消',
+                type: 'warning'
+            })
+                .then(() => {
+                    this.$http.delete('users/' + id).then(() => {
+                        this.$message.success('删除用户成功！')
+                        this.getUserList()
+                    }).catch(() => {
+                        this.$message.error('删除用户失败')
+                    })
+                })
+                .catch(() => {
+                    this.$message.error('已取消删除操作')
+                })
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
+
 </style>
