@@ -81,7 +81,6 @@ export default {
             const { data: res } = await this.$http.get('menus')
             if (res.meta.status !== 200) return this.$message.errr('msg')
             this.menulist = res.data
-            console.log(res)
         },
         toggleBtn () {
             this.iscollapse = !this.iscollapse
@@ -89,7 +88,6 @@ export default {
         activePathBtn (path) {
             this.activePath = path
             window.sessionStorage.setItem('activePath', path)
-            console.log(path)
         }
     }
 }
