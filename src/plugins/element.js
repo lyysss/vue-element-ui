@@ -24,7 +24,11 @@ import {
     Pagination,
     Dialog,
     MessageBox,
-    Tag
+    Tag,
+    Tree,
+    Select,
+    Option
+
 } from 'element-ui'
 
 // 加载ele-ui的内容。因为没有使用全局加载。所以用到哪个组件加载整个组件
@@ -51,6 +55,9 @@ Vue.use(Tooltip)
 Vue.use(Pagination)
 Vue.use(Dialog)
 Vue.use(Tag)
+Vue.use(Tree)
+Vue.use(Select)
+Vue.use(Option)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm

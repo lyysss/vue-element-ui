@@ -53,8 +53,9 @@
                         >
                             <el-col :span="5">
                                 <el-tag
-                                closable
-                                @close="removeRightByid(scope.row,item1.id)">{{item1.authName}}</el-tag>
+                                    closable
+                                    @close="removeRightByid(scope.row,item1.id)"
+                                >{{item1.authName}}</el-tag>
                                 <i class="el-icon-caret-right"></i>
                             </el-col>
                             <el-col :span="19">
@@ -64,8 +65,11 @@
                                     :key="item2.id"
                                 >
                                     <el-col :span="6">
-                                        <el-tag type="success" closable
-                                    @close="removeRightByid(scope.row,item2.id)">{{item2.authName}}</el-tag>
+                                        <el-tag
+                                            type="success"
+                                            closable
+                                            @close="removeRightByid(scope.row,item2.id)"
+                                        >{{item2.authName}}</el-tag>
                                         <i class="el-icon-caret-right"></i>
                                     </el-col>
                                     <el-col :span="18">
@@ -98,12 +102,29 @@
                             size="mini"
                             type="danger"
                             icon="el-icon-delete"
-                            @click="removeJueseById(scope.row)"
+                            @click="removeJueseById(scope.row.id)"
                         >删除</el-button>
-                        <el-button size="mini" type="warning" icon="el-icon-setting">分配权限</el-button>
+                        <el-button
+                            size="mini"
+                            type="warning"
+                            icon="el-icon-setting"
+                            @click="showSetRightDialog(scope.row)"
+                        >分配权限</el-button>
                     </template>
                 </el-table-column>
             </el-table>
+            <!-- 显示隐藏的权限弹出框 -->
+            <el-dialog
+                title="分配权限"
+                :visible.sync="setRightDialogVisible"
+                width="50%"
+            >
+                <el-tree :data="rightsList" :props="rightListProps" show-checkbox node-key="id" default-expand-all :default-checked-keys="defKeys" ref="treeRef"></el-tree>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="setRightDialogVisible = false">取 消</el-button>
+                    <el-button type="primary" @click="allotRights">确 定</el-button>
+                </span>
+            </el-dialog>
         </el-card>
     </div>
 </template>
@@ -130,7 +151,20 @@ export default {
             },
             changeNowId: 0,
             changeNowName: '',
-            changeNowDesc: ''
+            changeNowDesc: '',
+            // 分配权限弹出框的显示与隐藏
+            setRightDialogVisible: false,
+            // 分配权限弹出框里面的全部权限数据
+            rightsList: [],
+            // 分配权限弹出框的树状控件渲染条件
+            rightListProps: {
+                children: 'children',
+                label: 'authName'
+            },
+            // 通过递归得到的已有的权限的id数组
+            defKeys: [],
+            // 当前点击的对象用户 点击分配权限的时候传进来值，做post请求准备
+            dataId: ''
         }
     },
     created () {
@@ -226,12 +260,59 @@ export default {
             if (confirmResult !== 'confirm') {
                 return this.$message.info('取消操作')
             }
-            const { data: res } = await this.$http.delete(`roles/${id1.id}/rights/${id2}`)
+            const { data: res } = await this.$http.delete(
+                `roles/${id1.id}/rights/${id2}`
+            )
             if (res.meta.status !== 200) {
                 return this.$message.error('删除权限失败')
             }
             this.$message.success('取消权限成功！')
             id1.children = res.data
+        },
+        // 集成全部权限的弹出框
+        async showSetRightDialog (role) {
+            this.dataId = role.id
+            this.defKeys = []
+            const { data: res } = await this.$http.get('rights/tree')
+            if (res.meta.status !== 200) {
+                return this.$message.error('获取列表失败')
+            }
+            // 把获取到的数据保存到data中
+            this.rightsList = res.data
+
+            this.getLeafKeys(role, this.defKeys)
+
+            this.setRightDialogVisible = true
+        },
+        // 通过递归的形式，获取角色下的三级权限，并保存到defKeys数组中
+        // node===节点
+        getLeafKeys (node, arr) {
+            // 如果当前node节点不包含children属性，那它就是三级节点。
+            if (!node.children) {
+                return arr.push(node.id)
+            }
+            // 如何node有children属性不是三级权限。那他到这就要递归循环执行子节点数据继续判断执行添加ID
+            node.children.forEach(item => this.getLeafKeys(item, arr))
+        },
+        // 集成全部权限的弹出框确认POST提交已取消或勾选的权限
+        async allotRights () {
+            // 这里通过ref获得当前对象。当前对象element这个属性里面的方法。
+            // 能够获取到已经选择的权限，和半选的权限
+            const keys = [
+                // 通过es7 的展开，keys数组接收组合成一个数组对象
+                ...this.$refs.treeRef.getCheckedKeys(), // 获取已选的权限
+                ...this.$refs.treeRef.getHalfCheckedKeys() // 获取半选的权限
+            ]
+            // keys数组对象通过join方法，转换成字符串。分隔符是逗号。
+            const idStr = keys.join(',')
+            // 然后发出修改请求。
+            const { data: res } = await this.$http.post(`roles/${this.dataId}/rights`, { rids: idStr }) // 请求地址和请求头。把转化后的字符串传进去。
+            if (res.meta.status !== 200) {
+                return this.$message.error('角色授权失败')
+            }
+            this.$message.success('角色授权成功')
+            this.getUserList() // 修改成功，重新加载下当前数据
+            this.setRightDialogVisible = false // close window
         }
     }
 }

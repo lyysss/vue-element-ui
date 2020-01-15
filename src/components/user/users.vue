@@ -73,7 +73,12 @@
                                 placement="top-start"
                                 :enterable="false"
                             >
-                                <el-button type="warning" icon="el-icon-setting" circle></el-button>
+                                <el-button
+                                    type="warning"
+                                    icon="el-icon-setting"
+                                    circle
+                                    @click="fenpeiJueseBtn(scope.row)"
+                                ></el-button>
                             </el-tooltip>
                         </template>
                     </el-table-column>
@@ -148,6 +153,26 @@
                     <el-button type="primary" @click="editDialogCheck">确 定</el-button>
                 </span>
             </el-dialog>
+
+            <el-dialog title="分配角色" :visible.sync="fenpeiJuese" width="40%" @close="clearUserInfo">
+                <p>当前的用户：{{nowUserInfo.username}}</p>
+                <p>当前的角色：{{nowUserInfo.role_name}}</p>
+                <p>
+                    分配新角色:
+                    <el-select v-model="selectedRoleId" placeholder="请选择">
+                        <el-option
+                            v-for="item in rolesList"
+                            :key="item.id"
+                            :label="item.roleName"
+                            :value="item.id"
+                        ></el-option>
+                    </el-select>
+                </p>
+                <span slot="footer" class="dialog-footer">
+                    <el-button @click="fenpeiJuese = false">取 消</el-button>
+                    <el-button type="primary" @click="setFenpeiJuese">确 定</el-button>
+                </span>
+            </el-dialog>
         </div>
     </div>
 </template>
@@ -209,7 +234,15 @@ export default {
                         trigger: 'blur'
                     }
                 ]
-            }
+            },
+            // 分配权限的显示与隐藏
+            fenpeiJuese: false,
+            // 当前需要被分配的用户的信息
+            nowUserInfo: {},
+            // 服务器请求的角色列表
+            rolesList: [],
+            // 已选择分配的用户id
+            selectedRoleId: ''
         }
     },
     created () {
@@ -304,21 +337,51 @@ export default {
                 type: 'warning'
             })
                 .then(() => {
-                    this.$http.delete('users/' + id).then(() => {
-                        this.$message.success('删除用户成功！')
-                        this.getUserList()
-                    }).catch(() => {
-                        this.$message.error('删除用户失败')
-                    })
+                    this.$http
+                        .delete('users/' + id)
+                        .then(() => {
+                            this.$message.success('删除用户成功！')
+                            this.getUserList()
+                        })
+                        .catch(() => {
+                            this.$message.error('删除用户失败')
+                        })
                 })
                 .catch(() => {
                     this.$message.error('已取消删除操作')
                 })
+        },
+        async fenpeiJueseBtn (userInfo) {
+            this.nowUserInfo = userInfo
+            const { data: res } = await this.$http.get('roles')
+            if (res.meta.status !== 200) {
+                this.$message.error('获取角色失败')
+            }
+            this.rolesList = res.data
+            this.fenpeiJuese = true
+        },
+        // 点击按钮，put提交修改分配角色
+        async setFenpeiJuese () {
+            // 这里有BUG
+            if (!this.selectedRoleId) {
+                return this.$message.error('请勿重复分配')
+            }
+            const { data: res } = await this.$http.put(`users/${this.nowUserInfo.id}/role`, { rid: this.selectedRoleId })
+            if (res.meta.status !== 200) {
+                return this.$message.error('分配角色失败')
+            }
+            this.$message.success('分配角色成功')
+            this.fenpeiJuese = false
+            this.getUserList()
+        },
+        // 关闭分配角色窗口后自动清空里面数据。
+        clearUserInfo () {
+            this.nowUserInfo = {}
+            this.selectedRoleId = ''
         }
     }
 }
 </script>
 
 <style lang="scss" scoped>
-
 </style>
