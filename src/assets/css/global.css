@@ -15,3 +15,6 @@ body,
 .el-pagination{
     margin-top: 20px;
 }
+.el-cascader-menu {
+    height: 250px;
+}
