@@ -183,7 +183,7 @@ export default {
         this.getGoodsCategories()
     },
     methods: {
-        // 获取商品分类数据
+        // 获取商品分类数据!
         async getGoodsCategories () {
             const { data: res } = await this.$http.get('categories', {
                 params: this.querInfo
