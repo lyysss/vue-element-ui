@@ -9,7 +9,7 @@
 
             <el-card class="box-card">
                 <el-row :gutter="20">
-                    <el-col :span="10">
+                <el-col :span="10">
                         <el-input
                             placeholder="请输入内容"
                             v-model="queryInfo.query"

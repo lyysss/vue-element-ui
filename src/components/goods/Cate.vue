@@ -234,13 +234,18 @@ export default {
         },
         addCate () {
             this.$refs.addCateFormRef.validate(async valid => {
+                // 判断valid 验证规则是否通过，
+                console.log(valid)
                 if (!valid) return
                 const { data: res } = await this.$http.post('categories', this.addCateForm)
                 if (res.meta.status !== 201) {
                     return this.$message.error('添加分类失败')
                 }
+                // 添加成功提示消息
                 this.$message.success('添加分类成功')
+                // 添加成功刷新列表
                 this.getGoodsCategories()
+                // 添加成功隐藏当前对话框
                 this.addListDialogVisible = false
             })
         },
