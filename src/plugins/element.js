@@ -28,8 +28,10 @@ import {
     Tree,
     Select,
     Option,
-    Cascader
-
+    Cascader,
+    Alert,
+    Tabs,
+    TabPane
 } from 'element-ui'
 
 // 加载ele-ui的内容。因为没有使用全局加载。所以用到哪个组件加载整个组件
@@ -60,6 +62,9 @@ Vue.use(Tree)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Cascader)
+Vue.use(Alert)
+Vue.use(Tabs)
+Vue.use(TabPane)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
