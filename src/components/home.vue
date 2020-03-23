@@ -53,44 +53,43 @@
 
 <script>
 export default {
-    data () {
-        return {
-            menulist: [],
-            iconObj: {
-                '125': 'el-icon-user',
-                '103': 'el-icon-lock',
-                '101': 'el-icon-shopping-bag-1',
-                '102': 'el-icon-document',
-                '145': 'el-icon-s-data'
-            },
-            iscollapse: false,
-            activePath: ''
-        }
-    },
-    created () {
-        this.getMenulist()
-        this.activePath = window.sessionStorage.getItem('activePath')
-    },
-
-    methods: {
-        tuichu: function () {
-            window.sessionStorage.clear()
-            this.$router.push('/login')
-        },
-        async getMenulist () {
-            const { data: res } = await this.$http.get('menus')
-            if (res.meta.status !== 200) return this.$message.errr('msg')
-            this.menulist = res.data
-            console.log(res.data)
-        },
-        toggleBtn () {
-            this.iscollapse = !this.iscollapse
-        },
-        activePathBtn (path) {
-            this.activePath = path
-            window.sessionStorage.setItem('activePath', path)
-        }
+  data () {
+    return {
+      menulist: [],
+      iconObj: {
+        '125': 'el-icon-user',
+        '103': 'el-icon-lock',
+        '101': 'el-icon-shopping-bag-1',
+        '102': 'el-icon-document',
+        '145': 'el-icon-s-data'
+      },
+      iscollapse: false,
+      activePath: ''
     }
+  },
+  created () {
+    this.getMenulist()
+    this.activePath = window.sessionStorage.getItem('activePath')
+  },
+
+  methods: {
+    tuichu: function () {
+      window.sessionStorage.clear()
+      this.$router.push('/login')
+    },
+    async getMenulist () {
+      const { data: res } = await this.$http.get('menus')
+      if (res.meta.status !== 200) return this.$message.errr('msg')
+      this.menulist = res.data
+    },
+    toggleBtn () {
+      this.iscollapse = !this.iscollapse
+    },
+    activePathBtn (path) {
+      this.activePath = path
+      window.sessionStorage.setItem('activePath', path)
+    }
+  }
 }
 </script>
 

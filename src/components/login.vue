@@ -38,61 +38,61 @@
 
 <script>
 export default {
-    data () {
-        return {
-            loginForm: {
-                username: 'admin',
-                password: '123456'
-            },
-            loginFormRules: {
-                username: [
-                    {
-                        min: 4,
-                        max: 15,
-                        message: '正确账号 4 ~ 15 字符',
-                        trigger: 'blur'
-                    },
-                    {
-                        required: true,
-                        message: '账号不能为空',
-                        trigger: 'blur'
-                    }
-                ],
-                password: [
-                    {
-                        min: 6,
-                        max: 18,
-                        message: '请输入正确的密码 6 ~ 18 字符',
-                        trigger: 'blur'
-                    },
-                    {
-                        required: true,
-                        message: '密码不能为空',
-                        trigger: 'blur'
-                    }
-                ]
-            }
-        }
-    },
-    methods: {
-        chongzhi: function () {
-            this.$refs.loginFormRef.resetFields()
-        },
-        login: function () {
-            this.$refs.loginFormRef.validate(async valid => {
-                if (!valid) return
-                const { data: res } = await this.$http.post(
-                    'login',
-                    this.loginForm
-                )
-                if (res.meta.status !== 200) return this.$message.error('登录失败！')
-                this.$message.success('登录成功！')
-                console.log(res)
-                window.sessionStorage.setItem('token', res.data.token)
-                this.$router.push('./home')
-            })
-        }
+  data () {
+    return {
+      loginForm: {
+        username: 'admin',
+        password: '123456'
+      },
+      loginFormRules: {
+        username: [
+          {
+            min: 4,
+            max: 15,
+            message: '正确账号 4 ~ 15 字符',
+            trigger: 'blur'
+          },
+          {
+            required: true,
+            message: '账号不能为空',
+            trigger: 'blur'
+          }
+        ],
+        password: [
+          {
+            min: 6,
+            max: 18,
+            message: '请输入正确的密码 6 ~ 18 字符',
+            trigger: 'blur'
+          },
+          {
+            required: true,
+            message: '密码不能为空',
+            trigger: 'blur'
+          }
+        ]
+      }
     }
+  },
+  methods: {
+    chongzhi: function () {
+      this.$refs.loginFormRef.resetFields()
+    },
+    login: function () {
+      this.$refs.loginFormRef.validate(async valid => {
+        if (!valid) return
+        const { data: res } = await this.$http.post(
+          'login',
+          this.loginForm
+        )
+        if (res.meta.status !== 200) return this.$message.error('登录失败！')
+        this.$message.success('登录成功！')
+        console.log(res)
+        window.sessionStorage.setItem('token', res.data.token)
+        this.$router.push('./home')
+      })
+    }
+  }
 }
 </script>
 

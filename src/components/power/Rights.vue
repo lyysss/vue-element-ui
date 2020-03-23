@@ -24,24 +24,24 @@
 </template>
 <script>
 export default {
-    data () {
-        return {
-            quanxianList: []
-        }
-    },
-    created () {
-        this.getQuanxian()
-    },
-    methods: {
-        async getQuanxian () {
-            const { data: res } = await this.$http.get('rights/list')
-            if (res.meta.status !== 200) {
-                return this.$message.error('获取权限失败')
-            }
-            console.log(res.data)
-            this.quanxianList = res.data
-        }
+  data () {
+    return {
+      quanxianList: []
     }
+  },
+  created () {
+    this.getQuanxian()
+  },
+  methods: {
+    async getQuanxian () {
+      const { data: res } = await this.$http.get('rights/list')
+      if (res.meta.status !== 200) {
+        return this.$message.error('获取权限失败')
+      }
+      console.log(res.data)
+      this.quanxianList = res.data
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>
