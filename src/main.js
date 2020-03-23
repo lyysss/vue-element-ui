@@ -24,6 +24,18 @@ Vue.config.productionTip = false
 // 注册table-with-tree-grid表单折叠
 Vue.component('tree-table', TreeTable)
 
+// 定义时间过滤器 用竖线调用
+Vue.filter('dateFormat', function (time) {
+  const dt = new Date(time)
+  const y = dt.getFullYear()
+  const m = (dt.getMonth() + 1 + '').padStart(2, '0')
+  const d = (dt.getDay() + '').padStart(2, '0')
+
+  const hh = (dt.getHours() + '').padStart(2, '0')
+  const mm = (dt.getMinutes() + '').padStart(2, '0')
+  const ss = (dt.getSeconds() + '').padStart(2, '0')
+  return `${y}-${m}-${d} ${hh}:${mm}:${ss}`
+})
 new Vue({
   router,
   render: h => h(App)
