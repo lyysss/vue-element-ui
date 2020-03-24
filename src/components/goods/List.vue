@@ -7,10 +7,10 @@
         </el-breadcrumb>
         <el-card>
             <div class="goods_TopSeach">
-                <el-input placeholder="请输入内容" v-model="seachValue">
-                    <el-button slot="append" icon="el-icon-search"></el-button>
+                <el-input placeholder="请输入内容" v-model="queryInfo.query" clearable @clear="getGoodsData">
+                    <el-button slot="append" icon="el-icon-search"  @click="getGoodsData"></el-button>
                 </el-input>
-                <el-button type="primary">添加商品</el-button>
+                <el-button type="primary" @click="addGoodsBtn">添加商品</el-button>
             </div>
             <el-table :data="goodsList" border stripe>
                 <el-table-column type="index"></el-table-column>
@@ -29,7 +29,7 @@
                             <el-button type="primary" icon="el-icon-edit" circle></el-button>
                         </el-tooltip>
                         <el-tooltip class="item" effect="dark" content="删除商品" placement="top-start">
-                            <el-button type="danger" icon="el-icon-delete" circle></el-button>
+                            <el-button type="danger" icon="el-icon-delete" circle @click="goodsDeleteBtn(item)"></el-button>
                         </el-tooltip>
                     </template>
                 </el-table-column>
@@ -40,7 +40,7 @@
                 @current-change="handleCurrentChange"
                 :current-page="queryInfo.pagenum"
                 :page-sizes="[5, 10, 15, 20]"
-                :page-size="pagesize"
+                :page-size="queryInfo.pagesize"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total"
                 background
@@ -89,6 +89,31 @@ export default {
     handleCurrentChange (newNum) {
       this.queryInfo.pagenum = newNum
       this.getGoodsData()
+    },
+    async goodsDelete (e) {
+      const { data: res } = await this.$http.delete('goods/' + e.row.goods_id)
+      if (res.meta.status !== 200) {
+        return this.$message.error('删除失败')
+      }
+      this.$message.success('删除成功')
+      this.getGoodsData()
+    },
+    goodsDeleteBtn (e) {
+      this.$confirm('此操作将永久删除该分类, 是否继续?', '警告', {
+        confirmButtonText: 'YES',
+        cancelButtonText: 'NO',
+        type: 'warning'
+      }).then(() => {
+        this.goodsDelete(e)
+      }).catch(() => {
+        this.$message({
+          type: 'info',
+          message: '已取消删除'
+        })
+      })
+    },
+    addGoodsBtn () {
+      this.$router.push('/goods/add')
     }
   }
 }
