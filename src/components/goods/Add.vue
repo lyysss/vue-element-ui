@@ -49,9 +49,13 @@
                             ></el-cascader>
                         </el-form-item>
                     </el-tab-pane>
-                    <el-tab-pane label="商品参数" name="1">商品参数</el-tab-pane>
-                    <el-tab-pane label="商品属性" name="2">商品属性</el-tab-pane>
-                    <el-tab-pane label="商品图片" name="3">商品图片</el-tab-pane>
+                    <el-tab-pane label="商品参数" name="1">商品参数上传数据添加商品 为啥从后台获取 。 失败。只能自己写</el-tab-pane>
+                    <el-tab-pane label="商品属性" name="2">商品属性 上传数据添加商品 为啥从后台获取 。 失败。只能自己写</el-tab-pane>
+                    <el-tab-pane label="商品图片" name="3">
+                      <el-upload :action="uploadUrl" :on-preview="handlePreview" :on-remove="handleRemove" list-type="picture" :headers="qingqiutou">
+                        <el-button size="small" type="primary">点击上传</el-button>
+                      </el-upload>
+                    </el-tab-pane>
                     <el-tab-pane label="商品内容" name="4">商品内容</el-tab-pane>
                 </el-tabs>
             </el-form>
@@ -115,7 +119,12 @@ export default {
           }
         ]
       },
-      cateLists: []
+      cateLists: [],
+      uploadUrl: 'http://127.0.0.1:8888/api/private/v1/upload',
+      // 因为el-upload 内有自己内部封装的ajax请求。没有把我们main设置的默认请求附带的token值设置进去。所以会请求失败。可以用请求头把我们本身的token值带进去。
+      qingqiutou: {
+        Authorization: window.sessionStorage.getItem('token')
+      }
     }
   },
   created () {
@@ -139,7 +148,11 @@ export default {
       console.log('即将离开的是' + b)
     //   return false
     // 只要返回值是false 就会阻止切换标签页
-    }
+    },
+    // 点击预览图片操作
+    handlePreview () {},
+    // 点击删除当前不满意的图片操作
+    handleRemove () {}
   },
   computed: {}
 }
@@ -151,7 +164,7 @@ export default {
     font-size: 12px;
 }
 .el-form-item {
-    margin-left: 30px;
+    margin-left: 50px;
     width: 80%;
 }
 </style>

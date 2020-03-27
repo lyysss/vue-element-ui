@@ -33,7 +33,8 @@ import {
   Tabs,
   TabPane,
   Steps,
-  Step
+  Step,
+  Upload
 } from 'element-ui'
 
 // 加载ele-ui的内容。因为没有使用全局加载。所以用到哪个组件加载整个组件
@@ -69,6 +70,7 @@ Vue.use(Tabs)
 Vue.use(TabPane)
 Vue.use(Steps)
 Vue.use(Step)
+Vue.use(Upload)
 
 Vue.prototype.$message = Message
 Vue.prototype.$confirm = MessageBox.confirm
