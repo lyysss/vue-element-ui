@@ -44,6 +44,7 @@ export default {
       console.log(this.ordersList)
       console.log(this.total)
     }
+    // async await  async await
   }
 }
 </script>

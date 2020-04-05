@@ -2,7 +2,7 @@
     <div>
         <div class="container">
             <img src="../assets/aaa.gif" alt="">
-            <p>李一一的星空探索起点</p>
+            <p>一一的编码之路</p>
         </div>
     </div>
 </template>
