@@ -1,11 +1,10 @@
 <template>
     <div>
         <div class="container">
-            <img src="../assets/aaa.gif" alt="">
-            <p>一一的编码之路</p>
+            <p>Vue后台管理系统</p>
         </div>
     </div>
-</template>
+</template>i
 <script>
 export default {
   data () {
@@ -21,20 +20,18 @@ export default {
         display: flex;
         justify-content: center;
         align-items: center;
-        img{
-            width: 100%;
-            height: 100%;
-        }
+        background-color: #2c9678;
+        box-shadow: 0 0 20px #111;
         p{
             z-index: 1000;
-            font-size: 80px;
+            font-size: 30px;
             color: #ffffff;
             font-weight: 600;
             position: absolute;
-            letter-spacing: 20px;
+            letter-spacing: 10px;
             top: 120px;
             box-shadow: 0 0 10px #000;
-            padding: 0 10px;
+            padding: 10px 20px;
         }
     }
 </style>

@@ -100,11 +100,14 @@ export default {
 .login {
     background-color: #274a6c;
     height: 100%;
+    background-image: url('../assets/aaa.gif');
+    background-repeat: no-repeat;
+    background-size: 100% 100%;
 }
 .login_box {
     width: 450px;
     height: 300px;
-    opacity: 0.9;
+    opacity: 0.6;
     background-color: #fff;
     border-radius: 10px;
     position: absolute;
@@ -131,6 +134,9 @@ export default {
             object-fit: cover;
         }
     }
+}
+.login_box:hover{
+    opacity: 1;
 }
 .login_from {
     position: absolute;
