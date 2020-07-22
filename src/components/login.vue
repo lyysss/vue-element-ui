@@ -7,7 +7,7 @@
 
             <el-form
                 ref="loginFormRef"
-                label-width="60px"
+                label-width="65px"
                 :model="loginForm"
                 :rules="loginFormRules"
                 class="login_from"
@@ -15,7 +15,7 @@
                 <el-form-item label="账号:" prop="username">
                     <el-input
                         prefix-icon="el-icon-user"
-                        v-model="loginForm.username"
+                        v-model="loginForm.mobile"
                         maxlength="15"
                     ></el-input>
                 </el-form-item>
@@ -41,11 +41,11 @@ export default {
   data () {
     return {
       loginForm: {
-        username: 'admin',
+        mobile: '15680175221',
         password: '123456'
       },
       loginFormRules: {
-        username: [
+        mobile: [
           {
             min: 4,
             max: 15,
@@ -82,13 +82,13 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return
         const { data: res } = await this.$http.post(
-          'login',
+          'adminLogin',
           this.loginForm
         )
-        if (res.meta.status !== 200) return this.$message.error('登录失败！')
-        this.$message.success('登录成功！')
+        // if (res.meta.status !== 200) return this.$message.error('登录失败！')
+        // this.$message.success('登录成功！')
         console.log(res)
-        window.sessionStorage.setItem('token', res.data.token)
+        // window.sessionStorage.setItem('token', res.data.token)
         this.$router.push('./home')
       })
     }

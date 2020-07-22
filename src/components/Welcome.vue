@@ -4,7 +4,7 @@
             <p>Vue后台管理系统</p>
         </div>
     </div>
-</template>i
+</template>
 <script>
 export default {
   data () {

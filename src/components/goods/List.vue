@@ -99,6 +99,7 @@ export default {
       this.getGoodsData()
     },
     goodsDeleteBtn (e) {
+      console.log(e)
       this.$confirm('此操作将永久删除该分类, 是否继续?', '警告', {
         confirmButtonText: 'YES',
         cancelButtonText: 'NO',
