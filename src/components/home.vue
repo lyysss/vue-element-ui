@@ -1,19 +1,55 @@
 <template>
-    <el-container class="page">
-        <el-header>
-            <div class="el-header-l">
-                <div class="el-header-l-l">
-                    <img src="../assets/laopo.jpg" />
-                </div>
-                <h4>s. 后台管理系统</h4>
-            </div>
-            <el-button type="info" @click="tuichu">退出登录</el-button>
-        </el-header>
-        <el-container>
-            <el-aside :width="iscollapse?'64px':'200px'">
-                <div class="toggle-button" @click="toggleBtn">|||</div>
+  <el-container class="page">
+    <el-header>
+      <div class="el-header-l">
+        <div class="el-header-l-l">
+          <img src="../assets/timg.jpg" />
+        </div>
+        <h4>s. 后台管理系统</h4>
+      </div>
+      <el-button type="info" @click="tuichu">退出登录</el-button>
+    </el-header>
+    <el-container>
+      <el-aside :style="iswidth?'width:64px':'width:200px'">
+        <div class="toggle-button" @click="toggleBtn">|||</div>
+        <el-menu
+          mode="vertical"
+          default-active="1"
+          class="el-menu-vertical-demo"
+          background-color="#333744"
+          text-color="#fff"
+          active-text-color="#ffd04b"
+          :unique-opened="true"
+          :collapse="iswidth"
+          :router="true"
+        >
+          <el-submenu index="1">
+            <template slot="title">
+              <i class="el-icon-menu"></i>
+              <span slot="title">会员商城</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/goods/lunbotu">轮播图</el-menu-item>
+              <el-menu-item index="/goods/list">会员商品管理</el-menu-item>
+              <!-- <el-menu-item index="/goods/add">待添加</el-menu-item>
+              <el-menu-item index="/goods/Params">待添加</el-menu-item>
+              <el-menu-item index="/goods/Cate">待添加</el-menu-item> -->
+               <el-menu-item index="/goods/Cate">商城订单查询</el-menu-item>
+              <el-menu-item index="">待添加</el-menu-item>
+              <el-menu-item index="">待添加</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-menu-item index="">
+            <i class="el-icon-document"></i>
+            <span slot="title">其他</span>
+          </el-menu-item>
+          <el-menu-item index="">
+            <i class="el-icon-setting"></i>
+            <span slot="title">其他</span>
+          </el-menu-item>
+        </el-menu>
 
-                <el-menu
+        <!-- <el-menu
                     background-color="#333744"
                     text-color="#fff"
                     active-text-color="#ffd04b"
@@ -26,7 +62,7 @@
                     <el-submenu :index="item.id+ ''" v-for="item in menulist" :key="item.id">
                         <template slot="title">
                             <i :class="iconObj[item.id]"></i>
-                            <span>{{item.authName}}</span>
+                            <span>{{item.name}}</span>
                         </template>
                         <el-menu-item
                             :index="'/'+subItem.path"
@@ -36,19 +72,19 @@
                         >
                             <template slot="title">
                                 <i class="el-icon-menu"></i>
-                                <span>{{subItem.authName}}</span>
+                                <span>{{subItem.name}}</span>
                             </template>
                         </el-menu-item>
                     </el-submenu>
-                </el-menu>
-            </el-aside>
-            <!-- 右侧内容主题 -->
-            <el-main>
-                <!-- 路由占位符 -->
-                <router-view></router-view>
-            </el-main>
-        </el-container>
+        </el-menu>-->
+      </el-aside>
+      <!-- 右侧内容主题 -->
+      <el-main>
+        <!-- 路由占位符 -->
+        <router-view></router-view>
+      </el-main>
     </el-container>
+  </el-container>
 </template>
 
 <script>
@@ -57,13 +93,14 @@ export default {
     return {
       menulist: [],
       iconObj: {
+        // 样式icon
         '125': 'el-icon-user',
         '103': 'el-icon-lock',
         '101': 'el-icon-shopping-bag-1',
         '102': 'el-icon-document',
         '145': 'el-icon-s-data'
       },
-      iscollapse: false,
+      iswidth: false,
       activePath: ''
     }
   },
@@ -71,7 +108,6 @@ export default {
     this.getMenulist()
     this.activePath = window.sessionStorage.getItem('activePath')
   },
-
   methods: {
     tuichu: function () {
       window.sessionStorage.clear()
@@ -82,8 +118,9 @@ export default {
       if (res.meta.status !== 200) return this.$message.errr('msg')
       this.menulist = res.data
     },
-    toggleBtn () {
-      this.iscollapse = !this.iscollapse
+    toggleBtn: function () {
+      console.log(this.iswidth)
+      this.iswidth = !this.iswidth
     },
     activePathBtn (path) {
       this.activePath = path
@@ -124,6 +161,7 @@ export default {
 }
 .el-aside {
     background-color: #333744;
+    transition: 800ms;
     .toggle-button {
         background-color: #4a5064;
         font-size: 10px;

@@ -2,7 +2,7 @@
     <div class="login">
         <div class="login_box">
             <div class="headimg">
-                <img src="../assets/laopo.jpg" />
+                <img src="../assets/timg.jpg" />
             </div>
 
             <el-form
@@ -12,7 +12,7 @@
                 :rules="loginFormRules"
                 class="login_from"
             >
-                <el-form-item label="账号:" prop="username">
+                <el-form-item label="账号:" prop="mobile">
                     <el-input
                         prefix-icon="el-icon-user"
                         v-model="loginForm.mobile"
@@ -41,7 +41,7 @@ export default {
   data () {
     return {
       loginForm: {
-        mobile: '15680175221',
+        mobile: '17674022714',
         password: '123456'
       },
       loginFormRules: {
@@ -82,13 +82,12 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return
         const { data: res } = await this.$http.post(
-          'adminLogin',
-          this.loginForm
+          `adminLogin?mobile=${this.loginForm.mobile}&password=${this.loginForm.password}`
         )
-        // if (res.meta.status !== 200) return this.$message.error('登录失败！')
-        // this.$message.success('登录成功！')
+        if (res.code !== 200) return this.$message.error('登录失败！')
+        this.$message.success('登录成功！')
         console.log(res)
-        // window.sessionStorage.setItem('token', res.data.token)
+        window.sessionStorage.setItem('token', res.data.token)
         this.$router.push('./home')
       })
     }
@@ -100,21 +99,21 @@ export default {
 .login {
     background-color: #274a6c;
     height: 100%;
-    background-image: url('../assets/aaa.gif');
+    background-image: url('../assets/loginB.jpg');
     background-repeat: no-repeat;
     background-size: 100% 100%;
 }
 .login_box {
     width: 450px;
     height: 300px;
-    opacity: 0.6;
+    opacity: 0.8;
     background-color: #fff;
     border-radius: 10px;
     position: absolute;
     left: 50%;
     top: 50%;
     transform: translate(-50%, -50%);
-
+    transition: all 1s linear;
     .headimg {
         width: 130px;
         height: 130px;
@@ -137,6 +136,7 @@ export default {
 }
 .login_box:hover{
     opacity: 1;
+    transition: all 300ms linear;
 }
 .login_from {
     position: absolute;

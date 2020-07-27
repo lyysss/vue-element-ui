@@ -1,8 +1,6 @@
 <template>
     <div>
-        <div class="container">
-            <p>Vue后台管理系统</p>
-        </div>
+        <h1>帮外卖后台管理</h1>
     </div>
 </template>
 <script>
@@ -18,7 +16,7 @@ export default {
         height: 670px;
         position: relative;
         display: flex;
-        justify-content: center;
+        justify-content: center;    
         align-items: center;
         background-color: #2c9678;
         box-shadow: 0 0 20px #111;

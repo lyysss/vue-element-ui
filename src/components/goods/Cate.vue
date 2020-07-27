@@ -3,18 +3,12 @@
         <!-- 面包屑导航 -->
         <el-breadcrumb separator="/">
             <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
-            <el-breadcrumb-item>商品管理</el-breadcrumb-item>
-            <el-breadcrumb-item>商品分类</el-breadcrumb-item>
+            <el-breadcrumb-item>会员商城</el-breadcrumb-item>
+            <el-breadcrumb-item>订单管理</el-breadcrumb-item>
         </el-breadcrumb>
 
         <!-- 卡片区域 -->
         <el-card>
-            <el-row class="addFenlei">
-                <el-col>
-                    <el-button type="primary" @click="showAddListDialogVisible()">添加分类</el-button>
-                </el-col>
-            </el-row>
-
             <!-- 表格 -->
             <tree-table
                 :data="catelist"
@@ -190,8 +184,9 @@ export default {
       })
       console.log(res)
       if (res.meta.status !== 200) {
-        return this.$message.error('获取商品分类失败')
+        return this.$message.error('获取订单失败')
       }
+      this.$message.error('成功获取订单数据')
       this.catelist = res.data.result
       this.total = res.data.total
     },

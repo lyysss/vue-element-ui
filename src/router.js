@@ -12,6 +12,7 @@ import GoodsList from './components/goods/List.vue'
 import Add from './components/goods/Add.vue'
 import Order from './components/order/Order.vue'
 import Report from './components/report/report.vue'
+import lunbotu from './components/goods/lunbotu.vue'
 
 Vue.use(VueRouter)
 
@@ -39,13 +40,13 @@ const router = new VueRouter({
       path: '/Roles',
       component: Roles
     }, {
-      path: '/categories',
+      path: '/goods/Cate',
       component: Cate
     }, {
-      path: '/Params',
+      path: '/goods/Params',
       component: Params
     }, {
-      path: '/goods',
+      path: '/goods/list',
       component: GoodsList
     }, {
       path: '/goods/add',
@@ -56,6 +57,9 @@ const router = new VueRouter({
     }, {
       path: '/reports',
       component: Report
+    }, {
+      path: '/goods/lunbotu',
+      component: lunbotu
     }]
   }]
 })

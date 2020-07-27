@@ -18,6 +18,7 @@ import 'quill/dist/quill.snow.css' // for snow theme
 import 'quill/dist/quill.bubble.css' // for bubble theme
 
 axios.defaults.baseURL = 'http://182.61.33.209:81/app-bwm-admin/'
+axios.defaults.headers.post['Content-Type'] = 'application/x-www-form-urlencoded'
 // 挂载到vue全局对象中。加载一个拦截器。因为API调用需要请求头中包含token值，才证明有权限，修改里面的数据
 axios.interceptors.request.use(config => {
   config.headers.Authorization = window.sessionStorage.getItem('token')
