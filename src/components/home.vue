@@ -33,17 +33,22 @@
               <el-menu-item index="/goods/list">会员商品管理</el-menu-item>
               <!-- <el-menu-item index="/goods/add">待添加</el-menu-item>
               <el-menu-item index="/goods/Params">待添加</el-menu-item>
-              <el-menu-item index="/goods/Cate">待添加</el-menu-item> -->
-               <el-menu-item index="/goods/Cate">商城订单查询</el-menu-item>
-              <el-menu-item index="">待添加</el-menu-item>
-              <el-menu-item index="">待添加</el-menu-item>
+              <el-menu-item index="/goods/Cate">待添加</el-menu-item>-->
+              <el-menu-item index="/goods/Cate">商城订单查询</el-menu-item>
+              <el-menu-item index>待添加</el-menu-item>
+              <el-menu-item index>待添加</el-menu-item>
             </el-menu-item-group>
           </el-submenu>
-          <el-menu-item index="">
-            <i class="el-icon-document"></i>
-            <span slot="title">其他</span>
-          </el-menu-item>
-          <el-menu-item index="">
+          <el-submenu index="2">
+            <template slot="title">
+              <i class="el-icon-document"></i>
+              <span slot="title">城市管理</span>
+            </template>
+            <el-menu-item-group>
+              <el-menu-item index="/goods/City">城市设置</el-menu-item>
+            </el-menu-item-group>
+          </el-submenu>
+          <el-menu-item index>
             <i class="el-icon-setting"></i>
             <span slot="title">其他</span>
           </el-menu-item>

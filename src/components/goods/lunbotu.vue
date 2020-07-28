@@ -83,7 +83,7 @@ export default {
   methods: {
     async getGoodsData () {
       const { data: res } = await this.$http.get(
-        'getCarousel?token=' + this.token,
+        'app-bwm-admin/getCarousel?token=' + this.token,
         {}
       )
       console.log(res)
@@ -104,7 +104,7 @@ export default {
         cancelButtonText: '取消',
         type: 'warning'
       }).then(async () => {
-        const { data: res } = await this.$http.get('deleteCarousel?id=' + id + '&token=' + this.token, {})
+        const { data: res } = await this.$http.get('app-bwm-admin/deleteCarousel?id=' + id + '&token=' + this.token, {})
         console.log(res)
         if (res.code !== 200) {
           this.$message({
@@ -131,7 +131,7 @@ export default {
     async addLunboBtn () {
       let token = window.sessionStorage.getItem('token')
       this.addLunbo.token = token
-      const { data: res } = await this.$http.get('addCarousel', {
+      const { data: res } = await this.$http.get('app-bwm-admin/addCarousel', {
         params: this.addLunbo
       })
       console.log(res)

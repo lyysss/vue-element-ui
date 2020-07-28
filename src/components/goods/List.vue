@@ -7,7 +7,7 @@
     </el-breadcrumb>
     <el-card>
       <div class="goods_TopSeach">
-        <el-button type="primary" @click="addGoodsShow=true">添加商品</el-button>
+        <el-button type="primary" @click="addGoodsFromShow()">添加商品</el-button>
       </div>
       <el-table :data="goodsList" border stripe>
         <el-table-column type="index"></el-table-column>
@@ -35,7 +35,12 @@
               content="上架商品"
               placement="top-end"
             >
-              <el-button type="success" icon="el-icon-sell" circle @click="shangjiaGoods"></el-button>
+              <el-button
+                type="success"
+                icon="el-icon-sell"
+                circle
+                @click="shangjiaGoods(item.row.id)"
+              ></el-button>
             </el-tooltip>
             <el-tooltip
               class="item"
@@ -44,10 +49,15 @@
               content="下架商品"
               placement="top-end"
             >
-              <el-button type="warning" icon="el-icon-sold-out" circle @click="xiajiaGoods"></el-button>
+              <el-button
+                type="warning"
+                icon="el-icon-sold-out"
+                circle
+                @click="xiajiaGoods(item.row.id)"
+              ></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="编辑商品" placement="top-end">
-              <el-button type="primary" icon="el-icon-edit" circle @click="bianjiGoods"></el-button>
+              <el-button type="primary" icon="el-icon-edit" circle @click="bianjiGoods(item)"></el-button>
             </el-tooltip>
             <el-tooltip class="item" effect="dark" content="删除商品" placement="top-start">
               <el-button type="danger" icon="el-icon-delete" circle @click="goodsDeleteBtn(item)"></el-button>
@@ -56,44 +66,71 @@
         </el-table-column>
       </el-table>
 
-      <el-dialog
-      title="添加会员商品"
-      :visible.sync="addGoodsShow"
-      width="50%"
-    >
-      <el-form ref="addCateFormRef" :model="addGoodsForm" label-width="100px">
-        <el-form-item label="商品名">
-          <el-input v-model="addGoodsForm.title"></el-input>
-        </el-form-item>
-        <el-form-item label="副标题">
-          <el-input v-model="addGoodsForm.hint"></el-input>
-        </el-form-item>
-        <el-form-item label="商品图">
-          <el-input v-model="addGoodsForm.carousel"></el-input>
-        </el-form-item>
-        <el-form-item label="商品介绍">
-          <el-input v-model="addGoodsForm.details"></el-input>
-        </el-form-item>
-        <el-form-item label="商品价格">
-          <el-input v-model="addGoodsForm.price"></el-input>
-        </el-form-item>
-        <el-form-item label="商品库存量">
-          <el-input v-model="addGoodsForm.stock"></el-input>
-        </el-form-item>
-        <el-form-item label="商品排序">
-          <el-input v-model="addGoodsForm.sort" placeholder="输入数字越大则越排前面"></el-input>
-        </el-form-item>
-        <el-form-item label="是否上架">
-          <el-input v-model="addGoodsForm.status"></el-input>
-        </el-form-item>
+      <el-dialog title="添加会员商品" :visible.sync="addGoodsShow" width="50%">
+        <el-form ref="addCateFormRef" :model="addGoodsForm" label-width="100px">
+          <el-form-item label="商品名">
+            <el-input v-model="addGoodsForm.title"></el-input>
+          </el-form-item>
+          <el-form-item label="副标题">
+            <el-input v-model="addGoodsForm.hint"></el-input>
+          </el-form-item>
+          <el-form-item label="商品图">
+            <el-input v-model="addGoodsForm.carousel"></el-input>
+          </el-form-item>
+          <el-form-item label="商品介绍">
+            <el-input v-model="addGoodsForm.details"></el-input>
+          </el-form-item>
+          <el-form-item label="商品价格">
+            <el-input v-model="addGoodsForm.price"></el-input>
+          </el-form-item>
+          <el-form-item label="商品库存量">
+            <el-input v-model="addGoodsForm.stock"></el-input>
+          </el-form-item>
+          <el-form-item label="商品排序">
+            <el-input v-model="addGoodsForm.sort" placeholder="输入数字越大则越排前面"></el-input>
+          </el-form-item>
+          <el-form-item label="是否上架">
+            <el-input v-model="addGoodsForm.status"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addGoodsShow = false">取 消</el-button>
+          <el-button type="primary" @click="addGoodsBtn">确 定</el-button>
+        </span>
+      </el-dialog>
 
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="addGoodsShow = false">取 消</el-button>
-        <el-button type="primary" @click="addGoodsBtn">确 定</el-button>
-      </span>
-    </el-dialog>
-
+      <el-dialog title="编辑该会员商品" :visible.sync="addGoodsShow1" width="50%">
+        <el-form ref="addCateFormRef" :model="addGoodsForm" label-width="100px">
+          <el-form-item label="商品名">
+            <el-input v-model="addGoodsForm.title"></el-input>
+          </el-form-item>
+          <el-form-item label="副标题">
+            <el-input v-model="addGoodsForm.hint"></el-input>
+          </el-form-item>
+          <el-form-item label="商品图">
+            <el-input v-model="addGoodsForm.carousel"></el-input>
+          </el-form-item>
+          <el-form-item label="商品介绍">
+            <el-input v-model="addGoodsForm.details"></el-input>
+          </el-form-item>
+          <el-form-item label="商品价格">
+            <el-input v-model="addGoodsForm.price"></el-input>
+          </el-form-item>
+          <el-form-item label="商品库存量">
+            <el-input v-model="addGoodsForm.stock"></el-input>
+          </el-form-item>
+          <el-form-item label="商品排序">
+            <el-input v-model="addGoodsForm.sort" placeholder="输入数字越大则越排前面"></el-input>
+          </el-form-item>
+          <el-form-item label="是否上架">
+            <el-input v-model="addGoodsForm.status"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="addGoodsShow1 = false">取 消</el-button>
+          <el-button type="primary" @click="addGoodsBtn1">确 定</el-button>
+        </span>
+      </el-dialog>
       <el-pagination
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
@@ -133,17 +170,21 @@ export default {
         title: '',
         token: null,
         updatedTime: null
-      }
+      },
+      addGoodsShow1: false,
+      token: ''
     }
   },
   created () {
     this.getGoodsData()
     this.queryInfo.token = window.sessionStorage.getItem('token')
+    this.addGoodsForm.token = window.sessionStorage.getItem('token')
+    this.token = window.sessionStorage.getItem('token')
   },
   methods: {
     // 根据分类获取对应的商品列表
     async getGoodsData () {
-      const { data: res } = await this.$http.get('getCommodity', {
+      const { data: res } = await this.$http.get('app-bwm-admin/getCommodity', {
         params: this.queryInfo
       })
       console.log(res)
@@ -165,7 +206,7 @@ export default {
       this.getGoodsData()
     },
     async goodsDelete (e) {
-      const { data: res } = await this.$http.get('deleteCommodity?id=' + e.row.id + '&token=' + this.queryInfo.token)
+      const { data: res } = await this.$http.get('app-bwm-admin/deleteCommodity?id=' + e.row.id + '&token=' + this.queryInfo.token)
       console.log(res)
       if (res.code !== 200) {
         return this.$message.error('删除失败')
@@ -173,9 +214,14 @@ export default {
       this.$message.success('删除成功')
       this.getGoodsData()
     },
+    addGoodsFromShow () {
+      console.log('aaa')
+      // this.addGoodsForm = {}
+      this.addGoodsShow = true
+    },
     goodsDeleteBtn (e) {
       console.log(e)
-      this.$confirm('此操作将永久删除该分类, 是否继续?', '警告', {
+      this.$confirm('此操作将删除该商品, 是否继续?', '警告', {
         confirmButtonText: '删除',
         cancelButtonText: '取消',
         type: 'warning'
@@ -188,18 +234,48 @@ export default {
         })
       })
     },
-    shangjiaGoods () {
-
+    async shangjiaGoods (id) {
+      const { data: res } = await this.$http.get('app-bwm-admin/rackingCommodity?id=' + id + '&token=' + this.token)
+      console.log(res)
+      if (res.code !== 200) {
+        return this.$message.error('上架商品失败')
+      }
+      this.$message.success('上架商品成功')
+      this.getGoodsData()
     },
-    xiajiaGoods () {
-
+    async xiajiaGoods (id) {
+      console.log(id)
+      console.log(this.token)
+      const { data: res } = await this.$http.get('app-bwm-admin/soldoutCommodity?id=' + id + '&token=' + this.token)
+      console.log(res)
+      if (res.code !== 200) {
+        return this.$message.error('下架商品失败')
+      }
+      this.$message.success('下架商品成功')
+      this.getGoodsData()
     },
-    bianjiGoods () {
-
+    async bianjiGoods (item) {
+      console.log(item)
+      this.addGoodsForm = item.row
+      this.addGoodsShow1 = true
+      this.addGoodsForm.token = this.token
+    },
+    async addGoodsBtn1 () {
+      // addCommodity
+      const { data: res } = await this.$http.get('app-bwm-admin/upCommodity', {
+        params: this.addGoodsForm
+      })
+      console.log(res)
+      if (res.code !== 200) {
+        return this.$message.error('修改商品失败')
+      }
+      this.$message.success('修改商品成功')
+      this.addGoodsShow1 = false
+      this.getGoodsData()
     },
     async addGoodsBtn () {
       // addCommodity
-      const { data: res } = await this.$http.get('addCommodity', {
+      const { data: res } = await this.$http.get('app-bwm-admin/addCommodity', {
         params: this.addGoodsForm
       })
       console.log(res)
@@ -207,6 +283,7 @@ export default {
         return this.$message.error('添加商品失败')
       }
       this.$message.success('添加商品成功')
+      this.addGoodsShow = false
       this.getGoodsData()
     }
   }
