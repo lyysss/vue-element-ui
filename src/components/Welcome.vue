@@ -16,7 +16,7 @@ export default {
         height: 670px;
         position: relative;
         display: flex;
-        justify-content: center;    
+        justify-content: center;
         align-items: center;
         background-color: #2c9678;
         box-shadow: 0 0 20px #111;
